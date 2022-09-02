@@ -1,5 +1,5 @@
 # 🦢 Random Picture Bot
-Random Picture Bot is the all-in-one bot for requesting any picture you desire! Simply enter anything you would like a picture of and Random Picture Bot will reply with a picture of your request. Enjoy!
+Random Picture Bot is the all-in-one bot for requesting any picture you desire! Simply enter anything you would like a picture of and Random Picture Bot will reply with a picture of your request. (Made with Pycord and Unsplash) Enjoy!
 
 ![image](https://user-images.githubusercontent.com/94326100/187974258-bc49d3a3-e29b-4e95-af70-7a591894c323.png)
 
