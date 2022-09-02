@@ -94,55 +94,61 @@ class General(commands.Cog):
             )
 
         embed.add_field(
-            name = "`b.help`",
+            name = "***b.help***",
             value = "> Returns the help prompt." \
-                    "\n> **Aliases:** `b.h`",
+                    "\n> `(Aliases: b.h)`",
             inline = False
         )
 
         embed.add_field(
-            name = "`b.randompic (pic_req)`",
+            name = "***b.randompic (pic_req)***",
             value = "> Returns the a random picture of your request!" \
-                    "\n> **Aliases:** `b.randpic`, `b.rp`",
+                    "\n> `(Aliases: b.randpic, b.rp)`" \
+                    "\n> `Ex: b.randompic dog`",
             inline = False
         )
 
         embed.add_field(
-            name = "`b.add (pic_name) (link)`",
+            name = "***b.add (pic_name) (link)***",
             value = "> Use this command to add pictures to the bot's online database!" \
-                    "\n> **Aliases:** `b.a`",
+                    "\n> `(Aliases: b.a)`" \
+                    "\n> `Ex: b.add vega65 (image_link)`",
             inline = False
         )
 
         embed.add_field(
-            name = "`b.remove (pic_name) (link)`",
+            name = "***b.remove (pic_name) (link)***",
             value = "> Use this command to remove a picture from the bot's online database!" \
-                    "\n> **Aliases:** `b.r`",
+                    "\n> `(Aliases:  b.r)`" \
+                    "\n> `Ex: b.remove vega65 (image_link)`",
             inline = False
         )
 
         embed.add_field(
-            name = "`b.list`",
+            name = "***b.list***",
             value = "> Returns the list of pictures on the bot's online database!" \
-                    "\n> **Aliases:** `b.l`",
+                    "\n> `(Aliases: b.l)`",
             inline = False
         )
 
         embed.add_field(
-            name = "`b.picture (pic_name)`",
+            name = "***b.picture (pic_name)***",
             value = "> Returns the requested picture from the bot's online database!" \
-                    "\n> **Aliases:** `b.p`",
+                    "\n> `(Aliases: b.p)`" \
+                    "\n> `Ex: b.picture vega65`",
             inline = False
         )
+
         embed.add_field(
-            name = "`b.invite`",
+            name = "***b.invite***",
             value = "> Returns the invite link for Random Picture Bot!" \
-                    "\n> **Aliases:** `b.i`",
+                    "\n> `(Aliases: b.i)`",
             inline = False
         )
+
         embed.add_field(
-            name = "`b.ping`",
-            value = "> Returns your ping!", \
+            name = "***b.ping***",
+            value = "> Returns your ping!",
             inline = False
         )
 
