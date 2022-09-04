@@ -10,13 +10,14 @@ Invite the bot to your own server with this [link](https://discord.com/oauth2/au
 <details open>
 <summary>Click to expand</summary>
 <br>
+
 Use ```b.help``` to access the help prompt!
   
-![image](https://user-images.githubusercontent.com/94326100/187974258-bc49d3a3-e29b-4e95-af70-7a591894c323.png)
+![image](https://user-images.githubusercontent.com/94326100/188296430-3af7c266-fc17-4975-a3a9-c6eb6e6b299c.png)
 
 Use ```b.commands``` to access the commands list!
 
-![image](https://user-images.githubusercontent.com/94326100/188043835-6d7b4a8d-dd0f-4c21-8c9d-bac4da7b35b6.png)
+![image](https://user-images.githubusercontent.com/94326100/188296451-45752ce5-ac58-4c30-9dc3-dc990e10920d.png)
 
 Use ```b.invite``` to get the invite link for the bot!
  
