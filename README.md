@@ -12,29 +12,29 @@ View the upcoming changes to the Bot here!
 # :rainbow: Changelog
 
 v1.7 - 9/3/2022
-  Made information added to bot server-local
+ *Made information added to bot server-local
 
 v1.6 - 8/19/2022
-  Setup automatic data updates to Guthub
+ *Setup automatic data updates to Guthub
 
 v1.5 - 8/12/2022
-  Added `b.remove` and alias `b.r`
+ *Added `b.remove` and alias `b.r`
 
 v1.4 - 8/11/2022
-  Added `b.add`, `b.picture`, `b.list` 
-  Created aliases `b.c`
-  Minor Bug Fixes
+*Added `b.add`, `b.picture`, `b.list` 
+*Created aliases `b.c`
+*Minor Bug Fixes
 
 v1.3 - 8/10/2022
-  Added commands list - `b.commands` and created alias `b.c`
+*Added commands list - `b.commands` and created alias `b.c`
 
 v.1.2 - 8/9/2022
-  Added `b.invite` anad alias `b.i`
+*Added `b.invite` anad alias `b.i`
 
 v1.1 - 8/4/2022
-  Added `b.help`
-  Renamed `r.(image)` to `b.randompic (image)`
-  Created aliases `b.rp`. and `b.h`
+*Added `b.help`
+*Renamed `r.(image)` to `b.randompic (image)`
+*Created aliases `b.rp`. and `b.h`
 
 v1.0 - 7/31/2022
-  Initial Release
+*Initial Release
