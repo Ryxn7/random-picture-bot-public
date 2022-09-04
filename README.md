@@ -17,7 +17,16 @@ Use ```b.help``` to access the help prompt!
 
 Use ```b.commands``` to access the commands list!
 
-![image](https://user-images.githubusercontent.com/94326100/188296451-45752ce5-ac58-4c30-9dc3-dc990e10920d.png)
+![image](https://user-images.githubusercontent.com/94326100/188296472-f9ccaab3-707a-4e15-8f9d-c8fb564877b0.png)
+
+Use ```b.randompic (image)``` to request a random image of your choice!
+
+![image](https://user-images.githubusercontent.com/94326100/188296513-2464dfe4-ffa6-45ff-ac44-e5cf23077c61.png)
+
+Use ```b.add (image) (image_link)``` to add a picture that cannot be found on Unsplash to the Bot!
+
+![image](https://user-images.githubusercontent.com/94326100/188296695-4eb15637-eff4-4b68-8f07-58f05c277830.png)
+
 
 Use ```b.invite``` to get the invite link for the bot!
  
