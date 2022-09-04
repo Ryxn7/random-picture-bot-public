@@ -80,7 +80,6 @@ class General(commands.Cog):
         invite_link = database["invite_link"]
         message = "Invite Random Picture Bot to your own server using this link!" \
                   f"\n> {invite_link}"
-                  
         await ctx.send(message)
 
 
