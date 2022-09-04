@@ -21,15 +21,13 @@ Use ```b.commands``` to access the commands list!
 Use ```b.invite``` to get the invite link for the bot!
  
 ![image](https://user-images.githubusercontent.com/94326100/188296329-3eb643f8-1263-4f4c-a02e-dc131dcf93e1.png)
-
 </details>
-
 
 ## ☁️ Trello
 View the upcoming changes to the Bot here!
 > https://trello.com/b/V1PPfGyi/random-picture-bot
 
-## :rainbow: Changelog
+## 🌈 Changelog
 v1.7 - 9/3/2022
 
  * Made information added to bot server-local
