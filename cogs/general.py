@@ -1,197 +1,262 @@
 import discord
-from discord.ext import commands, tasks
-from loguru import logger
+from discord.ext import commands
 import json
-import base64
 import aiohttp
+from loguru import logger
+import requests
+import base64
+import random
 
 
 with open('data/database.json') as d:
     database = json.load(d)
 
+with open('data/pictures.json') as f:
+    pictures = json.load(f)
 
-class General(commands.Cog):
-        
+
+class randompic(commands.Cog):
+
     def __init__(self, client):
         self.client = client
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        invite_link = database["invite_link"]
-        activity = discord.Game(name = f"b.help | {invite_link}")
-        await self.client.change_presence(status=discord.Status.online, activity=activity)
-        logger.info("Random Picture Bot is ready.")
+    
+    # Command to request images from Unsplash API
+    @commands.command(aliases=['randpic', 'rp'])
+    async def randompic(self, ctx, *word):
 
 
-    @commands.command()
-    async def hi(self, ctx):
-        if ctx.author.id == 367469641150365702:
-            await ctx.send('Heya!')
+        word = list(word)
+
+        name = " ".join(word).lower()
+        query = "%20".join(word).lower()
+        link = database["api_unsplash"].replace('[query]', query)
+        data = requests.get(link).json()
+
+        # Checks if the request can be found on Unsplash
+        if data["total_pages"] == 0:
+            await ctx.send(f"There are no pictures for {name} on Unsplash :/" \
+                            "\nUse `b.add` to add pictures to the bots online database." \
+                            "\n> Use `b.commands` to view how to use the command.")
+
+        # Send a random picture of the request
+        else:
+            ok = random.randint(0, 9)
+
+            photo = data["results"][ok]["urls"]["regular"]
+            creator = data["results"][ok]["user"]["name"]
+            create_date = data["results"][ok]["updated_at"][:-10]
+            socials = data["results"][ok]["user"]["portfolio_url"]
+            invite_link = database["invite_link"]
+
+
+            embed = discord.Embed(title=f"**{name.title()}**", color=0x4ADEDE)
+
+            embed.add_field(
+                name = "Description",
+                value = f'**Photo by:** {creator} on Unsplash' \
+                        f'\n**Created on:** {create_date}' \
+                        f'\n**Socials:** {socials}',
+                inline = False
+            )
+            
+
+            embed.set_footer(text=f"Invite the Random Picture Bot using this link! > {invite_link}")
+            embed.set_image(url=photo)
+
+
+            await ctx.send(embed=embed)
     
 
-    # Returns the User's ping
-    @commands.command()
-    async def ping(self, ctx):
-        ping = int(round(self.client.latency * 1000))
-        await ctx.send(f"Pong! Your ping is {ping}ms")
+    # Command to add images to pictures.json if none are found on Unsplash API
+    @commands.command(aliases=['a'])
+    async def add(self, ctx, *np):
 
+        np = list(np)
+        pic = np[-1]
+        new_np = np[:-1]
+        desc = " ".join(new_np).lower()
+        title = desc.capitalize()
+        guildid = str(ctx.guild.id)
 
-    # Returns information on how to use the bot        
-    @commands.command(aliases=['h'])
-    async def help(self, ctx):
+        unsplash_link = database["api_unsplash"].replace('[query]', desc)
+        data = requests.get(unsplash_link).json()
 
-        embed = discord.Embed(
-            title="Random Picture Bot | Help",
-            color=0x7FFFD4
-            )
-
-        embed.add_field(
-            name = "About this bot:",
-            value = "Random Pic Bot is the all-in-one bot for requesting any picture you desire! " \
-                    "Simply enter anything you would like a picture of and Random Pic Bot will reply with a picture of your request. Enjoy!",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "Commands List",
-            value = "`b.commands` > Returns the list of Random Pictures Bot's commands!" \
-                    "\nAliases: `b.command`, `b.c`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "Bot Invite Link",
-            value = "`b.invite` > Returns the bot's invite link" \
-                    "\nAliases: `b.i`",
-            inline = False
-        )
         
-        image = "https://img.freepik.com/premium-vector/sakura-flowers-background-cherry-blossom-isolated-white-background_38668-274.jpg?w=996"
-        embed.set_thumbnail(url=image)
-        embed.set_footer(text="By Ryxn <3")
+        # Check if picture can be found on Unsplash
+        if data["total_pages"] == 0:
+            # Create new key if new guild id found
+            if guildid not in pictures:
+                pictures[guildid] = []
+                pictures[guildid][0] = {}
 
-        await ctx.send(embed=embed)
-    
+            # Add to database if entry not found
+            if desc not in pictures[guildid][0]:
+                pictures[guildid][0][desc] = []
+            pictures[guildid][0][desc].append(pic)
+            await ctx.send(f"`{np[-1]}` was added to the Bot's database.")
 
-    # Returns the invite link for the Bot
-    @commands.command(aliases=['i'])
-    async def invite(self, ctx):
+        else:
+            await ctx.send(f'{title} can be found on Unsplash!' \
+                           f"> Use `b.rp` to search for {title}!")
 
-        invite_link = database["invite_link"]
-        message = "Invite Random Picture Bot to your own server using this link!" \
-                  f"\n> {invite_link}"
-                  
-        await ctx.send(message)
+        with open('data/pictures.json', 'w') as f:
+            json.dump(pictures,f,indent=4)
 
-
-    # Returns a list of commands that offered by the Bot
-    @commands.command(name='commands', aliases=['command', 'c'])
-    async def _commands(self, ctx):
-
-        embed = discord.Embed(
-            title="Commands List",
-            color=0x40E0D0
-            )
-
-        embed.add_field(
-            name = "***b.help***",
-            value = "> Returns the help prompt." \
-                    "\n> `(Aliases: b.h)`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "***b.randompic (pic_req)***",
-            value = "> Returns the a random picture of your request!" \
-                    "\n> `(Aliases: b.randpic, b.rp)`" \
-                    "\n> `Ex: b.randompic dog`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "***b.add (pic_name) (link)***",
-            value = "> Use this command to add pictures to the bot's online database!" \
-                    "\n> `(Aliases: b.a)`" \
-                    "\n> `Ex: b.add vega65 (image_link)`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "***b.remove (pic_name) (link)***",
-            value = "> Use this command to remove a picture from the bot's online database!" \
-                    "\n> `(Aliases:  b.r)`" \
-                    "\n> `Ex: b.remove vega65 (image_link)`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "***b.list***",
-            value = "> Returns the list of pictures on the bot's online database!" \
-                    "\n> `(Aliases: b.l)`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "***b.picture (pic_name)***",
-            value = "> Returns the requested picture from the bot's online database!" \
-                    "\n> `(Aliases: b.p)`" \
-                    "\n> `Ex: b.picture vega65`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "***b.invite***",
-            value = "> Returns the invite link for Random Picture Bot!" \
-                    "\n> `(Aliases: b.i)`",
-            inline = False
-        )
-
-        embed.add_field(
-            name = "***b.ping***",
-            value = "> Returns your ping!",
-            inline = False
-        )
-
-        await ctx.send(embed=embed)
+        # await self.pushdata()
 
 
-    # Command to push changes made to pictures.json to Github
-    @commands.command()
-    async def gitPush(self, ctx):
-        if ctx.author.id == 367469641150365702:
-            filenames = ["data/pictures.json"]
-            for filename in filenames:
-                try:
-                    token = database["github_oath"]
-                    repo = "Ryxn7/Random-Pic-Bot"
-                    branch = "main"
-                    url = "https://api.github.com/repos/" + repo + "/contents/" + filename
+    # Automatically push new data to Github
+    async def pushdata(self):
+        filenames = ["data/pictures.json"]
+        for filename in filenames:
+            try:
+                token = database["github_oath"]
+                repo = "Ryxn7/Random-Pic-Bot"
+                branch = "main"
+                url = "https://api.github.com/repos/" + repo + "/contents/" + filename
 
-                    base64content = base64.b64encode(open(filename, "rb").read())
+                base64content = base64.b64encode(open(filename, "rb").read())
+
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(url + '?ref=' + branch, headers={"Authorization": "token " + token}) as data:
+                        data = await data.json()
+                sha = data['sha']
+
+                if base64content.decode('utf-8') + "\n" != data['content']:
+                    message = json.dumps(
+                        {"message": "Automatic data update.",
+                        "branch": branch,
+                        "content": base64content.decode("utf-8"),
+                        "sha": sha}
+                    )
 
                     async with aiohttp.ClientSession() as session:
-                        async with session.get(url + '?ref=' + branch, headers={"Authorization": "token " + token}) as data:
-                            data = await data.json()
-                    sha = data['sha']
+                        async with session.put(url, data=message, headers={"Content-Type": "application/json",
+                                                                           "Authorization": "token " + token}) as resp:
+                            print(resp)
+                else:
+                    print("Nothing to update.")
+            except Exception as e:
+                logger.exception(e)
 
-                    if base64content.decode('utf-8') + "\n" != data['content']:
-                        message = json.dumps(
-                            {"message": "Automatic data update.",
-                            "branch": branch,
-                            "content": base64content.decode("utf-8"),
-                            "sha": sha}
-                        )
 
-                        async with aiohttp.ClientSession() as session:
-                            async with session.put(url, data=message, headers={"Content-Type": "application/json",
-                                                                               "Authorization": "token " + token}) as resp:
-                                print(resp)   
-                    else:
-                        print("Nothing to update.")
-                except Exception as e:
-                    logger.exception(e)
-            await ctx.send("Pushed latest data to GitHub.")
+    # Command to remove an image from the Bot's database
+    @commands.command(aliases=['r'])
+    async def remove(self, ctx, *rp):
+
+        rp = list(rp)
+        pic = rp[-1]
+        del_p = rp[:-1]
+        desc = " ".join(del_p).lower()
+        title = desc.capitalize()
+        guildid = str(ctx.guild.id)
+
+
+        if desc in pictures[guildid][0]:
+            pictures[guildid][0][desc].remove(pic)
+            await ctx.send(f"`{rp[-1]}` was removed from the Bot's database.")
+
+        else:
+            await ctx.send(f"{title} does not exist on the Bot's database)" \
+                           f"> Use `b.l` to view the list of pictures on the Bot's database!")
+
+
+        with open('data/pictures.json', 'w') as f:
+            json.dump(pictures,f,indent=4)
+        
+        print("pictures.json was updated.")
+
+        # await self.pushdata()
+
+
+    # Automatically push new data to Github
+    async def pushdata(self):
+        filenames = ["data/pictures.json"]
+        for filename in filenames:
+            try:
+                token = database["github_oath"]
+                repo = "Ryxn7/Random-Pic-Bot"
+                branch = "main"
+                url = "https://api.github.com/repos/" + repo + "/contents/" + filename
+
+                base64content = base64.b64encode(open(filename, "rb").read())
+
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(url + '?ref=' + branch, headers={"Authorization": "token " + token}) as data:
+                        data = await data.json()
+                sha = data['sha']
+
+                if base64content.decode('utf-8') + "\n" != data['content']:
+                    message = json.dumps(
+                        {"message": "Automatic data update.",
+                        "branch": branch,
+                        "content": base64content.decode("utf-8"),
+                        "sha": sha}
+                    )
+
+                    async with aiohttp.ClientSession() as session:
+                        async with session.put(url, data=message, headers={"Content-Type": "application/json",
+                                                                           "Authorization": "token " + token}) as resp:
+                            print(resp)
+                else:
+                    print("Nothing to update.")
+            except Exception as e:
+                logger.exception(e)
+    
+
+    # Command that shows the list of added pictures
+    @commands.command(aliases=["l"])
+    async def list(self, ctx):
+        
+        guildId = str(ctx.guild.id)
+        embed = discord.Embed(title="List of pictures on RPB's API", color=0x3acadf)
+
+        pic_list = sorted(pictures[guildId][0])
+        
+        if len(pic_list) == 0:
+            await ctx.send("There are currently no pictures stored on the Bot's database. Try adding pictures by using `b.add`!")
+
+        list_of_pictures = ""
+        for picture in pic_list:
+            list_of_pictures += picture + " \n"
+        
+        embed.add_field(
+            name = "Topics",
+            value = list_of_pictures,
+            inline = False
+        )
+
+        embed.set_footer(text="Use `b.picture` to access these pictures!")
+
+        await ctx.send(embed=embed)
+
+
+    # Command to retrieve and send the requested picture from the Bot's database
+    @commands.command(aliases=["p"])
+    async def picture(self, ctx, *word):
+
+        word = list(word)
+
+        name = " ".join(word).lower()
+        guildId = str(ctx.guild.id)
+
+        # Return the requested image from pictures.json
+        if name in pictures[guildId][0]:
+
+            photo = pictures[guildId][0][name][random.randint(0, len(pictures[guildId][0][name]) - 1)]
+    
+            embed = discord.Embed(title=f"**{name.title()}**", color=0x5e59eb)
+
+            embed.set_image(url=photo)
+            embed.set_footer(text=f"> {photo}")
+
+            await ctx.send(embed=embed)
+        
+        else:
+            await ctx.send(f"{name} cannot be found on RPB's database" \
+                            "\n> Use `b.list` to view the list of pictures that are available on RPB's database" \
+                            "\n> Use `b.add` to add your own picture to RPB's database")
 
 
 def setup(client):
-    client.add_cog(General(client))
+    client.add_cog(randompic(client))
