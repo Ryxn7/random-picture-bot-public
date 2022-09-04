@@ -8,3 +8,33 @@ Random Picture Bot is the all-in-one bot for requesting any picture you desire! 
 # ☁️ Trello
 View the upcoming changes to the Bot here!
 > https://trello.com/b/V1PPfGyi/random-picture-bot
+
+# :rainbow: Changelog
+
+v1.7 - 9/3/2022
+  Made information added to bot server-local
+
+v1.6 - 8/19/2022
+  Setup automatic data updates to Guthub
+
+v1.5 - 8/12/2022
+  Added `b.remove` and alias `b.r`
+
+v1.4 - 8/11/2022
+  Added `b.add`, `b.picture`, `b.list` 
+  Created aliases `b.c`
+  Minor Bug Fixes
+
+v1.3 - 8/10/2022
+  Added commands list - `b.commands` and created alias `b.c`
+
+v.1.2 - 8/9/2022
+  Added `b.invite` anad alias `b.i`
+
+v1.1 - 8/4/2022
+  Added `b.help`
+  Renamed `r.(image)` to `b.randompic (image)`
+  Created aliases `b.rp`. and `b.h`
+
+v1.0 - 7/31/2022
+  Initial Release
