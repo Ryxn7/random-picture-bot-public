@@ -76,14 +76,23 @@ class randompic(commands.Cog):
         new_np = np[:-1]
         desc = " ".join(new_np).lower()
         title = desc.capitalize()
+        guildid = str(ctx.guild.id)
 
         unsplash_link = database["api_unsplash"].replace('[query]', desc)
         data = requests.get(unsplash_link).json()
 
+        
+        # Check if picture can be found on Unsplash
         if data["total_pages"] == 0:
-            if desc not in pictures:
-                pictures[desc] = []
-            pictures[desc].append(pic)
+            # Create new key if new guild id found
+            if guildid not in pictures:
+                pictures[guildid] = []
+                pictures[guildid][0] = {}
+
+            # Add to database if entry not found
+            if desc not in pictures[guildid][0]:
+                pictures[guildid][0][desc] = []
+            pictures[guildid][0][desc].append(pic)
             await ctx.send(f"`{np[-1]}` was added to the Bot's database.")
 
         else:
@@ -93,7 +102,7 @@ class randompic(commands.Cog):
         with open('data/pictures.json', 'w') as f:
             json.dump(pictures,f,indent=4)
 
-        await self.pushdata()
+        # await self.pushdata()
 
 
     # Automatically push new data to Github
@@ -140,10 +149,11 @@ class randompic(commands.Cog):
         del_p = rp[:-1]
         desc = " ".join(del_p).lower()
         title = desc.capitalize()
+        guildid = str(ctx.guild.id)
 
 
-        if desc in pictures:
-            pictures[desc].remove(pic)
+        if desc in pictures[guildid][0]:
+            pictures[guildid][0][desc].remove(pic)
             await ctx.send(f"`{rp[-1]}` was removed from the Bot's database.")
 
         else:
@@ -156,7 +166,7 @@ class randompic(commands.Cog):
         
         print("pictures.json was updated.")
 
-        await self.pushdata()
+        # await self.pushdata()
 
 
     # Automatically push new data to Github
@@ -198,9 +208,13 @@ class randompic(commands.Cog):
     @commands.command(aliases=["l"])
     async def list(self, ctx):
         
+        guildId = str(ctx.guild.id)
         embed = discord.Embed(title="List of pictures on RPB's API", color=0x3acadf)
 
-        pic_list = sorted(pictures)
+        pic_list = sorted(pictures[guildId][0])
+        
+        if len(pic_list) == 0:
+            await ctx.send("There are currently no pictures stored on the Bot's database. Try adding pictures by using `b.add`!")
 
         list_of_pictures = ""
         for picture in pic_list:
@@ -224,11 +238,12 @@ class randompic(commands.Cog):
         word = list(word)
 
         name = " ".join(word).lower()
+        guildId = str(ctx.guild.id)
 
         # Return the requested image from pictures.json
-        if name in pictures:
+        if name in pictures[guildId][0]:
 
-            photo = pictures[name][random.randint(0, len(pictures[name]) - 1)]
+            photo = pictures[guildId][0][name][random.randint(0, len(pictures[guildId][0][name]) - 1)]
     
             embed = discord.Embed(title=f"**{name.title()}**", color=0x5e59eb)
 
