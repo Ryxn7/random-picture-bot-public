@@ -17,7 +17,7 @@ v1.7 - 9/3/2022
 
 v1.6 - 8/19/2022
 
- * Setup automatic data updates to Guthub
+ * Setup automatic data updates to Github
 
 v1.5 - 8/12/2022
 
