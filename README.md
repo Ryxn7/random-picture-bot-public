@@ -6,7 +6,9 @@ Invite the bot to your own server with this [link](https://discord.com/oauth2/au
 
 ## 💦 Commands
 
-// ![image](https://user-images.githubusercontent.com/94326100/187974258-bc49d3a3-e29b-4e95-af70-7a591894c323.png)
+// Click to expand
+
+![image](https://user-images.githubusercontent.com/94326100/187974258-bc49d3a3-e29b-4e95-af70-7a591894c323.png)
 
 ![image](https://user-images.githubusercontent.com/94326100/188043835-6d7b4a8d-dd0f-4c21-8c9d-bac4da7b35b6.png)
 
