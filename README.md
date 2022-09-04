@@ -1,7 +1,7 @@
 # 🦢 Random Picture Bot
 Random Picture Bot is the all-in-one bot for requesting any picture you desire! Simply enter anything you would like a picture of and Random Picture Bot will reply with a picture of your request. (Made with [Pycord](https://docs.pycord.dev/en/stable/) and [Unsplash](https://unsplash.com/)) Enjoy!
 
-# :water: Invite
+# ☀️ Invite
 Invite the bot to your own server with this [link](https://discord.com/oauth2/authorize?client_id=929541715453431899&scope=bot&permissions=8)!
 
 ![image](https://user-images.githubusercontent.com/94326100/187974258-bc49d3a3-e29b-4e95-af70-7a591894c323.png)
