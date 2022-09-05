@@ -292,6 +292,9 @@ class randompic(commands.Cog):
         name = " ".join(word).lower()
         guildId = str(ctx.guild.id)
 
+        if name == "":
+            return await ctx.send("> Use `b.list` to get the list of pictures that are available on RPB's database" \
+                                  "\n> Use `b.add` to add your own pictures to RPB's database")
         # Return the requested image from pictures.json
         if name in pictures[guildId][0]:
 
