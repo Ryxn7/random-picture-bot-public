@@ -25,8 +25,19 @@ Use ```b.randompic (image)``` to request a random image of your choice!
 
 Use ```b.add (image) (image_link)``` to add a picture that cannot be found on Unsplash to the Bot!
 
-![image](https://user-images.githubusercontent.com/94326100/188296695-4eb15637-eff4-4b68-8f07-58f05c277830.png)
+![image](https://user-images.githubusercontent.com/94326100/188479169-c090b65c-eee9-44a4-8b74-22990126c0f3.png)
 
+Use ```b.list``` to view the pictures that have been added to the bot database!
+
+![image](https://user-images.githubusercontent.com/94326100/188479212-6eec99ac-7e38-4aa0-bf60-3e3308110dd4.png)
+
+Use ```b.picture (image)``` to retrieve the image from the bot database!
+
+![image](https://user-images.githubusercontent.com/94326100/188479273-ee70504b-0b22-46ed-b828-123d40560afc.png)
+
+Use ```b.remove``` (image) (image_link) to remove the picture that was added to the bot database!
+
+![image](https://user-images.githubusercontent.com/94326100/188479478-33f83edd-2e9b-4598-afb4-f431fc4e87cd.png)
 
 Use ```b.invite``` to get the invite link for the bot!
  
