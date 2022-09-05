@@ -41,7 +41,7 @@ Use ```b.remove``` (image) (image_link) to remove the picture that was added to 
 
 Use ```b.invite``` to get the invite link for the bot!
  
-![image](https://user-images.githubusercontent.com/94326100/188296329-3eb643f8-1263-4f4c-a02e-dc131dcf93e1.png)
+![image](https://user-images.githubusercontent.com/94326100/188479583-6a42224e-b095-4f15-be0d-880a1471e239.png)
 </details>
 
 ## ☁️ Trello
