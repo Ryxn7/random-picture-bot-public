@@ -17,9 +17,58 @@ with open('data/pictures.json') as f:
 
 class randompic(commands.Cog):
 
+
     def __init__(self, client):
         self.client = client
-    
+
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        guildID = str(guild.id)
+        pictures[guildID] = [0]
+        pictures[guildID][0] = {}
+
+        with open('data/pictures.json', 'w') as f:
+            json.dump(pictures,f,indent=4)
+
+        await self.pushdata()
+
+
+    # Automatically push new data to Github
+    async def pushdata(self):
+        filenames = ["data/pictures.json"]
+        for filename in filenames:
+            try:
+                token = database["github_oath"]
+                repo = "Ryxn7/Random-Pic-Bot"
+                branch = "main"
+                url = "https://api.github.com/repos/" + repo + "/contents/" + filename
+
+                base64content = base64.b64encode(open(filename, "rb").read())
+
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(url + '?ref=' + branch, headers={"Authorization": "token " + token}) as data:
+                        data = await data.json()
+                sha = data['sha']
+
+                if base64content.decode('utf-8') + "\n" != data['content']:
+                    message = json.dumps(
+                        {"message": "Automatic data update.",
+                        "branch": branch,
+                        "content": base64content.decode("utf-8"),
+                        "sha": sha}
+                    )
+
+                    async with aiohttp.ClientSession() as session:
+                        async with session.put(url, data=message, headers={"Content-Type": "application/json",
+                                                                           "Authorization": "token " + token}) as resp:
+                            print(resp)
+                else:
+                    print("Nothing to update.")
+            except Exception as e:
+                logger.exception(e)
+
+
     # Command to request images from Unsplash API
     @commands.command(aliases=['randpic', 'rp'])
     async def randompic(self, ctx, *word):
@@ -84,10 +133,6 @@ class randompic(commands.Cog):
         
         # Check if picture can be found on Unsplash
         if data["total_pages"] == 0:
-            # Create new key if new guild id found
-            if guildid not in pictures:
-                pictures[guildid] = []
-                pictures[guildid][0] = {}
 
             # Add to database if entry not found
             if desc not in pictures[guildid][0]:
@@ -102,7 +147,7 @@ class randompic(commands.Cog):
         with open('data/pictures.json', 'w') as f:
             json.dump(pictures,f,indent=4)
 
-        # await self.pushdata()
+        await self.pushdata()
 
 
     # Automatically push new data to Github
@@ -145,20 +190,27 @@ class randompic(commands.Cog):
     async def remove(self, ctx, *rp):
 
         rp = list(rp)
-        pic = rp[-1]
-        del_p = rp[:-1]
-        desc = " ".join(del_p).lower()
-        title = desc.capitalize()
-        guildid = str(ctx.guild.id)
 
+        if len(rp) == 1:
+            return await ctx.send("Please add the link of the image you would like to remove")
+        
+        else:
+            pic = rp[-1]
+            del_p = rp[:-1]
+            desc = " ".join(del_p).lower()
+            title = desc.capitalize()
+            guildid = str(ctx.guild.id)
 
+   
         if desc in pictures[guildid][0]:
             pictures[guildid][0][desc].remove(pic)
             await ctx.send(f"`{rp[-1]}` was removed from the Bot's database.")
+            if pictures[guildid][0][desc] == []:
+                del pictures[guildid][0][desc]
 
         else:
-            await ctx.send(f"{title} does not exist on the Bot's database)" \
-                           f"> Use `b.l` to view the list of pictures on the Bot's database!")
+            await ctx.send(f"{title} does not exist on the Bot's database." \
+                           f"> Use `b.l` to view the list of pictures on the Bot's database.")
 
 
         with open('data/pictures.json', 'w') as f:
@@ -166,7 +218,7 @@ class randompic(commands.Cog):
         
         print("pictures.json was updated.")
 
-        # await self.pushdata()
+        await self.pushdata()
 
 
     # Automatically push new data to Github
@@ -226,7 +278,7 @@ class randompic(commands.Cog):
             inline = False
         )
 
-        embed.set_footer(text="Use `b.picture` to access these pictures!")
+        embed.set_footer(text="Use b.picture to access these pictures!")
 
         await ctx.send(embed=embed)
 
