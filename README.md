@@ -49,6 +49,11 @@ View the upcoming changes to the Bot here!
 > https://trello.com/b/V1PPfGyi/random-picture-bot
 
 ## 🌈 Changelog
+v1.8 - 9/6/2022
+
+ * update b.add to allow users to add any picture to the bot's database
+ * Minor bug fixes
+
 v1.7 - 9/5/2022
 
  * Made information added to bot server-local
