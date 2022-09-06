@@ -49,7 +49,7 @@ View the upcoming changes to the Bot here!
 > https://trello.com/b/V1PPfGyi/random-picture-bot
 
 ## 🌈 Changelog
-v1.7 - 9/3/2022
+v1.7 - 9/5/2022
 
  * Made information added to bot server-local
 
