@@ -56,6 +56,7 @@ v1.7 - 9/5/2022
 v1.6 - 8/19/2022
 
  * Setup automatic data updates to Github
+ * Added b.Gitpush (Admin)
 
 v1.5 - 8/12/2022
 
