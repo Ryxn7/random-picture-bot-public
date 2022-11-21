@@ -11,35 +11,35 @@ Invite the bot to your own server with this [link](https://discord.com/oauth2/au
 <summary>Click to expand</summary>
 <br>
 
-Use ```b.help``` to access the help prompt!
+Use ```/help``` to access the help prompt!
   
 ![image](https://user-images.githubusercontent.com/94326100/188296430-3af7c266-fc17-4975-a3a9-c6eb6e6b299c.png)
 
-Use ```b.commands``` to access the commands list!
+Use ```/commands``` to access the commands list!
 
 ![image](https://user-images.githubusercontent.com/94326100/188296472-f9ccaab3-707a-4e15-8f9d-c8fb564877b0.png)
 
-Use ```b.randompic (image)``` to request a random image of your choice!
+Use ```/randompic (image)``` to request a random image of your choice!
 
 ![image](https://user-images.githubusercontent.com/94326100/188296513-2464dfe4-ffa6-45ff-ac44-e5cf23077c61.png)
 
-Use ```b.add (image) (image_link)``` to add a picture that cannot be found on Unsplash to the Bot!
+Use ```/add (image) (image_link)``` to add a picture that cannot be found on Unsplash to the Bot!
 
 ![image](https://user-images.githubusercontent.com/94326100/188479169-c090b65c-eee9-44a4-8b74-22990126c0f3.png)
 
-Use ```b.list``` to view the pictures that have been added to the bot database!
+Use ```/list``` to view the pictures that have been added to the bot database!
 
 ![image](https://user-images.githubusercontent.com/94326100/188479212-6eec99ac-7e38-4aa0-bf60-3e3308110dd4.png)
 
-Use ```b.picture (image)``` to retrieve the image from the bot database!
+Use ```/picture (image)``` to retrieve the image from the bot database!
 
 ![image](https://user-images.githubusercontent.com/94326100/188479273-ee70504b-0b22-46ed-b828-123d40560afc.png)
 
-Use ```b.remove``` (image) (image_link) to remove the picture that was added to the bot database!
+Use ```/remove``` (image) (image_link) to remove the picture that was added to the bot database!
 
 ![image](https://user-images.githubusercontent.com/94326100/188479478-33f83edd-2e9b-4598-afb4-f431fc4e87cd.png)
 
-Use ```b.invite``` to get the invite link for the bot!
+Use ```/invite``` to get the invite link for the bot!
  
 ![image](https://user-images.githubusercontent.com/94326100/188479583-6a42224e-b095-4f15-be0d-880a1471e239.png)
 </details>
@@ -49,6 +49,11 @@ View the upcoming changes to the Bot here!
 > https://trello.com/b/V1PPfGyi/random-picture-bot
 
 ## 🌈 Changelog
+v1.9 - 11/21/2022
+
+ * Changed commands to slash
+ * Minor bug fixes
+
 v1.8 - 9/6/2022
 
  * update b.add to allow users to add any picture to the bot's database
