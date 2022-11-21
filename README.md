@@ -51,12 +51,12 @@ View the upcoming changes to the Bot here!
 ## 🌈 Changelog
 v1.9 - 11/21/2022
 
- * Changed commands to slash
+ * Changed all commands to slash commands
  * Minor bug fixes
 
 v1.8 - 9/6/2022
 
- * update b.add to allow users to add any picture to the bot's database
+ * Updated b.add to allow users to add any picture to the bot's database
  * Minor bug fixes
 
 v1.7 - 9/5/2022
