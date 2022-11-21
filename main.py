@@ -11,8 +11,9 @@ with open("data/database.json", "r") as f:
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
+intents.guilds = True
 token = data["token"]
-client = commands.Bot(command_prefix='b.', case_insensitive=True, intents=intents)
+client = commands.Bot(case_insensitive=True, intents=intents)
 client.remove_command('help')
 
 
