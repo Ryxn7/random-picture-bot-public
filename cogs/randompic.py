@@ -69,23 +69,22 @@ class randompic(commands.Cog):
                 logger.exception(e)
 
 
-    # Command to request images from Unsplash API
-    @commands.command(aliases=['randpic', 'rp'])
-    async def randompic(self, ctx, *word):
+    # Command to request imagesz from Unsplash API
+    @discord.slash_command(name='randompicture', description='Returns a random picture of your Request')
+    async def randompic(self, ctx, word):
 
+        print(word)
+        rp = word.split()
+        print(rp)
 
-        word = list(word)
-
-        name = " ".join(word).lower()
-        query = "%20".join(word).lower()
-        link = database["api_unsplash"].replace('[query]', query)
+        link = database["api_unsplash"].replace('[query]', word)
         data = requests.get(link).json()
 
         # Checks if the request can be found on Unsplash
         if data["total_pages"] == 0:
-            await ctx.send(f"There are no pictures for {name} on Unsplash :/" \
-                            "\nUse `b.add` to add pictures to the bots online database." \
-                            "\n> Use `b.commands` to view how to use the command.")
+            await ctx.respond(f"There are no pictures for {word} on Unsplash :/" \
+                            "\nUse `/add` to add pictures to the bots online database." \
+                            "\n> Use `/commands` to view how to use the command.")
 
         # Send a random picture of the request
         else:
@@ -98,7 +97,7 @@ class randompic(commands.Cog):
             invite_link = database["invite_link"]
 
 
-            embed = discord.Embed(title=f"**{name.title()}**", color=0x4ADEDE)
+            embed = discord.Embed(title=f"**{word.title()}**", color=0x4ADEDE)
 
             embed.add_field(
                 name = "Description",
@@ -113,36 +112,23 @@ class randompic(commands.Cog):
             embed.set_image(url=photo)
 
 
-            await ctx.send(embed=embed)
+            await ctx.respond(embed=embed)
     
 
     # Command to add images to pictures.json if none are found on Unsplash API
-    @commands.command(aliases=['a'])
-    async def add(self, ctx, *np):
+    @discord.slash_command(name='add', description="Add a picture to the Bot's database > (picture_name) (picture_link)")
+    async def add(self, ctx, link):
 
-        np = list(np)
-        pic = np[-1]
-        new_np = np[:-1]
-        desc = " ".join(new_np).lower()
-        title = desc.capitalize()
+        rp = link.split()
+        pic = rp[-1]
+        desc = " ".join(rp[:-1]).lower()
         guildid = str(ctx.guild.id)
-
-        unsplash_link = database["api_unsplash"].replace('[query]', desc)
-        data = requests.get(unsplash_link).json()
-
         
-        # Check if picture can be found on Unsplash
-        if data["total_pages"] == 0:
-
-            # Add to database if entry not found
-            if desc not in pictures[guildid][0]:
-                pictures[guildid][0][desc] = []
-            pictures[guildid][0][desc].append(pic)
-            await ctx.send(f"`{np[-1]}` was added to the Bot's database.")
-
-        else:
-            await ctx.send(f'{title} can be found on Unsplash!' \
-                           f"> Use `b.rp` to search for {title}!")
+        # Add to database if entry not found
+        if desc not in pictures[guildid][0]:
+            pictures[guildid][0][desc] = []
+        pictures[guildid][0][desc].append(pic)
+        await ctx.respond(f"`{rp[-1]}` was added to the Bot's database.")
 
         with open('data/pictures.json', 'w') as f:
             json.dump(pictures,f,indent=4)
@@ -186,13 +172,13 @@ class randompic(commands.Cog):
 
 
     # Command to remove an image from the Bot's database
-    @commands.command(aliases=['r'])
-    async def remove(self, ctx, *rp):
+    @discord.slash_command(name='remove', description="Remove a picture from the Bot's database > (picture_name) (picture_link)")
+    async def remove(self, ctx, link):
 
-        rp = list(rp)
+        rp = link.split()
 
         if len(rp) == 1:
-            return await ctx.send("Please add the link of the image you would like to remove")
+            return await ctx.respond("Please add the link of the image you would like to remove")
         
         else:
             pic = rp[-1]
@@ -200,17 +186,16 @@ class randompic(commands.Cog):
             desc = " ".join(del_p).lower()
             title = desc.capitalize()
             guildid = str(ctx.guild.id)
-
    
         if desc in pictures[guildid][0]:
             pictures[guildid][0][desc].remove(pic)
-            await ctx.send(f"`{rp[-1]}` was removed from the Bot's database.")
+            await ctx.respond(f"`{rp[-1]}` was removed from the Bot's database.")
             if pictures[guildid][0][desc] == []:
                 del pictures[guildid][0][desc]
 
         else:
-            await ctx.send(f"{title} does not exist on the Bot's database." \
-                           f"> Use `b.l` to view the list of pictures on the Bot's database.")
+            await ctx.respond(f"{title} does not exist on the Bot's database." \
+                           f"> Use `/list` to view the list of pictures on the Bot's database.")
 
 
         with open('data/pictures.json', 'w') as f:
@@ -257,7 +242,7 @@ class randompic(commands.Cog):
     
 
     # Command that shows the list of added pictures
-    @commands.command(aliases=["l"])
+    @discord.slash_command(name='list', description="Returns the list of pictures on the Bot's database")
     async def list(self, ctx):
         
         guildId = str(ctx.guild.id)
@@ -266,7 +251,7 @@ class randompic(commands.Cog):
         pic_list = sorted(pictures[guildId][0])
         
         if len(pic_list) == 0:
-            await ctx.send("There are currently no pictures stored on the Bot's database. Try adding pictures by using `b.add`!")
+            await ctx.respond("There are currently no pictures stored on the Bot's database. Add pictures by using `/add`!")
 
         list_of_pictures = ""
         for picture in pic_list:
@@ -278,39 +263,37 @@ class randompic(commands.Cog):
             inline = False
         )
 
-        embed.set_footer(text="Use b.picture to access these pictures!")
+        embed.set_footer(text="Use /picture to access these pictures!")
 
-        await ctx.send(embed=embed)
+        await ctx.respond(embed=embed)
 
 
-    # Command to retrieve and send the requested picture from the Bot's database
-    @commands.command(aliases=["p"])
-    async def picture(self, ctx, *word):
+    # Command to retrieve and respond the requested picture from the Bot's database
+    @discord.slash_command(name='picture', description='Access your pictures > (picture_name)')
+    async def picture(self, ctx, word):
 
-        word = list(word)
-
-        name = " ".join(word).lower()
         guildId = str(ctx.guild.id)
 
-        if name == "":
-            return await ctx.send("> Use `b.list` to get the list of pictures that are available on RPB's database" \
-                                  "\n> Use `b.add` to add your own pictures to RPB's database")
-        # Return the requested image from pictures.json
-        if name in pictures[guildId][0]:
+        if word == "":
+            return await ctx.respond("> Use `/list` to get the list of pictures that are available on RPB's database" \
+                                  "\n> Use `/add` to add your own pictures to RPB's database")
 
-            photo = pictures[guildId][0][name][random.randint(0, len(pictures[guildId][0][name]) - 1)]
+        # Return the requested image from pictures.json
+        if word in pictures[guildId][0]:
+
+            photo = pictures[guildId][0][word][random.randint(0, len(pictures[guildId][0][word]) - 1)]
     
-            embed = discord.Embed(title=f"**{name.title()}**", color=0x5e59eb)
+            embed = discord.Embed(title=f"**{word.title()}**", color=0x5e59eb)
 
             embed.set_image(url=photo)
             embed.set_footer(text=f"> {photo}")
 
-            await ctx.send(embed=embed)
+            await ctx.respond(embed=embed)
         
         else:
-            await ctx.send(f"{name} cannot be found on RPB's database" \
-                            "\n> Use `b.list` to view the list of pictures that are available on RPB's database" \
-                            "\n> Use `b.add` to add your own picture to RPB's database")
+            await ctx.respond(f"{word} cannot be found on RPB's database" \
+                            "\n> Use `/list` to view the list of pictures that are available on RPB's database" \
+                            "\n> Use `/add` to add your own picture to RPB's database")
 
 
 def setup(client):
